@@ -29,57 +29,6 @@
     min-height: 100vh;
   }
 
-  /* ── Header ── */
-  .store-header {
-    background: linear-gradient(135deg, var(--orange) 0%, #e0693a 100%);
-    padding: 14px 20px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .store-header::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 120px; height: 120px;
-    background: var(--yellow);
-    border-radius: 50%;
-    opacity: 0.2;
-  }
-  .store-header::after {
-    content: '';
-    position: absolute;
-    bottom: -30px; left: -20px;
-    width: 80px; height: 80px;
-    background: var(--pink);
-    border-radius: 50%;
-    opacity: 0.15;
-  }
-  .currency-toggle {
-    display: flex;
-    justify-content: center;
-    max-width: 260px;
-    margin: 0 auto;
-    border-radius: 30px;
-    overflow: hidden;
-    border: 2px solid rgba(255,255,255,0.3);
-    position: relative;
-    z-index: 1;
-  }
-  .currency-btn {
-    flex: 1;
-    padding: 8px 16px;
-    border: none;
-    background: transparent;
-    color: rgba(255,255,255,0.7);
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  .currency-btn.active { background: white; color: var(--orange); }
-
   /* ── Main ── */
   .main-content {
     max-width: 600px;
@@ -244,13 +193,6 @@
   .razorpay-container p { font-size: 0.85rem; color: #666; margin-bottom: 16px; }
   .razorpay-container .rzp-note { font-size: 0.75rem; color: #999; margin-top: 12px; }
 
-  /* International */
-  .intl-info {
-    background: var(--orange-light); border-radius: 14px; padding: 16px;
-    font-size: 0.85rem; color: #555; line-height: 1.6;
-  }
-  .intl-info strong { color: var(--orange); }
-
   .confirm-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
   .action-btn {
     display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -274,13 +216,6 @@
 </style>
 </head>
 <body>
-
-<div class="store-header">
-  <div class="currency-toggle">
-    <button class="currency-btn active" onclick="setCurrency('INR')">🇮🇳 INR</button>
-    <button class="currency-btn" onclick="setCurrency('USD')">🌍 USD</button>
-  </div>
-</div>
 
 <div class="main-content">
   <div class="lang-tabs">
@@ -315,13 +250,12 @@
     <div class="pay-method-tabs" id="payMethodTabs">
       <button class="pay-method-tab" data-method="razorpay" onclick="setPayMethod('razorpay')">Pay Online</button>
       <button class="pay-method-tab" data-method="upi" onclick="setPayMethod('upi')">UPI / QR</button>
-      <button class="pay-method-tab" data-method="intl" id="intlTab" style="display:none" onclick="setPayMethod('intl')">International</button>
     </div>
 
     <div class="pay-section" id="section-razorpay">
       <div class="razorpay-container">
         <p>Pay securely via UPI, Netbanking, Debit/Credit Card, or Wallet</p>
-        <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Puj1EWssGxESyF" async></script></form>
+        <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Sa6uvl2XkySG8l" async></script></form>
         <p class="rzp-note">Powered by Razorpay. Your payment is secure and encrypted.</p>
       </div>
     </div>
@@ -343,18 +277,6 @@
       </div>
     </div>
 
-    <div class="pay-section" id="section-intl">
-      <div class="intl-info">
-        <p><strong>For international payments:</strong></p>
-        <p style="margin-top:8px;">Please contact us via WhatsApp or email to arrange payment through PayPal or international wire transfer.</p>
-        <p style="margin-top:8px;">
-          WhatsApp: <strong>+91 9346061000</strong><br>
-          Email: <strong>hareesh@bhaashaaworks.com</strong>
-        </p>
-        <p style="margin-top:12px;font-size:0.8rem;color:#888;">Mention your Order Ref when reaching out.</p>
-      </div>
-    </div>
-
     <div class="confirm-actions">
       <a class="action-btn whatsapp-btn" id="whatsappLink" target="_blank">📱 Send Order Details via WhatsApp</a>
       <a class="action-btn email-btn" id="emailLink" target="_blank">✉️ Send Order Details via Email</a>
@@ -369,30 +291,25 @@
 <script>
 const PRODUCTS = {
   telugu: [
-    { id:'MT-TE-M', name:'Magic Tiles - తెలుగు (మహా)', desc:'302 magnetic tiles on MDF. Script learning + word games for up to 4 players. 99.99% word coverage.', priceINR:2000, priceUSD:40, shippingINR:'local shipping extra', shippingUSD:'shipping included', category:'tiles' },
-    { id:'MT-TE-L', name:'Magic Tiles - తెలుగు (Lite)', desc:'191 magnetic tiles on EVA foam. Script learning + word games for up to 2 players. 99.9% word coverage.', priceINR:1000, priceUSD:25, shippingINR:'local shipping extra', shippingUSD:'shipping included', category:'tiles' },
-    { id:'JT-TE', name:'Jumbo Tiles - తెలుగు', desc:'191 large classroom tiles. Full set of Telugu characters. A teaching tool like no other.', priceINR:7000, priceUSD:95, shippingINR:'local shipping extra', shippingUSD:'shipping extra', category:'tiles' },
-    { id:'WB-TE', name:'Script Mastery Workbook - తెలుగు', desc:'~50 page activity workbook based on Ultra Rapid method. Includes audio pronunciation links.', priceINR:700, priceUSD:null, shippingINR:'shipping extra', shippingUSD:null, category:'workbook' },
-    { id:'URSM-TE', name:'Ultra Rapid Script Mastery - తెలుగు', desc:'Workshop / coaching for teachers or individuals. Script mastery in hours, not years.', priceINR:null, priceUSD:null, category:'workshop', contactOnly:true }
+    { id:'MT-TE-M', name:'Magic Tiles - తెలుగు (మహా)', desc:'302 magnetic tiles on MDF. Script learning + word games for up to 4 players. 99.99% word coverage.', price:2000, shipping:'local shipping extra', category:'tiles' },
+    { id:'MT-TE-L', name:'Magic Tiles - తెలుగు (Lite)', desc:'191 magnetic tiles on EVA foam. Script learning + word games for up to 2 players. 99.9% word coverage.', price:1000, shipping:'local shipping extra', category:'tiles' },
+    { id:'JT-TE', name:'Jumbo Tiles - తెలుగు', desc:'191 large classroom tiles. Full set of Telugu characters. A teaching tool like no other.', price:7000, shipping:'local shipping extra', category:'tiles' },
+    { id:'WB-TE', name:'Script Mastery Workbook - తెలుగు', desc:'~50 page activity workbook based on Ultra Rapid method. Includes audio pronunciation links.', price:700, shipping:'shipping extra', category:'workbook' },
+    { id:'URSM-TE', name:'Ultra Rapid Script Mastery - తెలుగు', desc:'Workshop / coaching for teachers or individuals. Script mastery in hours, not years.', price:null, category:'workshop', contactOnly:true }
   ],
   hindi: [
-    { id:'MT-HI-M', name:'Magic Tiles - हिंदी (महा)', desc:'252 magnetic tiles on MDF. Script learning + word games for up to 4 players. 99.99% word coverage.', priceINR:1900, priceUSD:38, shippingINR:'local shipping extra', shippingUSD:'shipping included', category:'tiles' },
-    { id:'JT-HI', name:'Jumbo Tiles - हिंदी', desc:'159 large classroom tiles. Full set of Hindi characters. Make class exciting, logical, practical.', priceINR:7000, priceUSD:95, shippingINR:'local shipping extra', shippingUSD:'shipping extra', category:'tiles' },
-    { id:'WB-HI', name:'Script Mastery Workbook - हिंदी', desc:'~50 page activity workbook based on Ultra Rapid method. Includes audio pronunciation links.', priceINR:900, priceUSD:null, shippingINR:'shipping extra', shippingUSD:null, category:'workbook' },
-    { id:'URSM-HI', name:'Ultra Rapid Script Mastery - हिंदी', desc:'Workshop / coaching for teachers or individuals. Script mastery in hours, not years.', priceINR:null, priceUSD:null, category:'workshop', contactOnly:true }
+    { id:'MT-HI-M', name:'Magic Tiles - हिंदी (महा)', desc:'252 magnetic tiles on MDF. Script learning + word games for up to 4 players. 99.99% word coverage.', price:1900, shipping:'local shipping extra', category:'tiles' },
+    { id:'JT-HI', name:'Jumbo Tiles - हिंदी', desc:'159 large classroom tiles. Full set of Hindi characters. Make class exciting, logical, practical.', price:7000, shipping:'local shipping extra', category:'tiles' },
+    { id:'WB-HI', name:'Script Mastery Workbook - हिंदी', desc:'~50 page activity workbook based on Ultra Rapid method. Includes audio pronunciation links.', price:900, shipping:'shipping extra', category:'workbook' },
+    { id:'URSM-HI', name:'Ultra Rapid Script Mastery - हिंदी', desc:'Workshop / coaching for teachers or individuals. Script mastery in hours, not years.', price:null, category:'workshop', contactOnly:true }
   ]
 };
 
-let currency = 'INR', lang = 'telugu', cart = {};
+let lang = 'telugu', cart = {};
 const UPI_ID = 'bhaasha@idfcbank';
 const WHATSAPP_NUM = '919346061000';
 const EMAIL = 'hareesh@bhaashaaworks.com';
 
-function setCurrency(c) {
-  currency = c;
-  document.querySelectorAll('.currency-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(c==='INR'?'INR':'USD')));
-  renderProducts(); updateCart();
-}
 function setLang(l) {
   lang = l;
   document.querySelectorAll('.lang-tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(l)));
@@ -409,14 +326,13 @@ function renderProducts() {
       html += `<div class="section-label">${{tiles:'Tiles',workbook:'Workbooks',workshop:'Workshops & Coaching'}[p.category]}</div>`;
       prev = p.category;
     }
-    const price = currency==='INR'?p.priceINR:p.priceUSD, sym = currency==='INR'?'₹':'$';
-    const ship = currency==='INR'?p.shippingINR:p.shippingUSD, qty = cart[p.id]||0;
+    const qty = cart[p.id]||0;
     if (p.contactOnly) {
       html += `<div class="product-card"><div class="product-name">${p.name}</div><div class="product-sku">${p.id}</div><div class="product-desc">${p.desc}</div><div class="product-price" style="color:var(--dark-blue);font-size:0.9rem">Contact for pricing</div><a href="https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent('Hi, I am interested in '+p.name+'. Please share pricing.')}" target="_blank" class="action-btn whatsapp-btn" style="margin-top:10px;padding:10px;font-size:0.8rem">📱 Enquire on WhatsApp</a></div>`;
       return;
     }
-    if (price===null) return;
-    html += `<div class="product-card ${qty>0?'has-items':''}"><div class="product-name">${p.name}</div><div class="product-sku">${p.id}</div><div class="product-desc">${p.desc}</div><div class="product-price">${sym}${price.toLocaleString()}${ship?`<span class="shipping-note">+ ${ship}</span>`:''}</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button><span class="qty-value">${qty}</span><button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button></div></div>`;
+    if (p.price===null) return;
+    html += `<div class="product-card ${qty>0?'has-items':''}"><div class="product-name">${p.name}</div><div class="product-sku">${p.id}</div><div class="product-desc">${p.desc}</div><div class="product-price">₹${p.price.toLocaleString('en-IN')}${p.shipping?`<span class="shipping-note">+ ${p.shipping}</span>`:''}</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button><span class="qty-value">${qty}</span><button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button></div></div>`;
   });
   container.innerHTML = html;
 }
@@ -431,11 +347,9 @@ function getCartTotal() {
   const all = getAllProducts(); let total=0, hasShip=false;
   Object.entries(cart).forEach(([id,qty]) => {
     if(qty<=0) return;
-    const p = all.find(x=>x.id===id); if(!p) return;
-    const price = currency==='INR'?p.priceINR:p.priceUSD; if(price===null) return;
-    total += price*qty;
-    const s = currency==='INR'?p.shippingINR:p.shippingUSD;
-    if(s&&s.includes('extra')) hasShip=true;
+    const p = all.find(x=>x.id===id); if(!p||p.price===null) return;
+    total += p.price*qty;
+    if(p.shipping&&p.shipping.includes('extra')) hasShip=true;
   });
   return {total,hasShip};
 }
@@ -445,16 +359,15 @@ function updateCart() {
   const entries = Object.entries(cart).filter(([_,q])=>q>0);
   if(!entries.length){ sum.classList.remove('visible'); return; }
   sum.classList.add('visible');
-  const all = getAllProducts(), sym = currency==='INR'?'₹':'$';
+  const all = getAllProducts();
   let h = '';
   entries.forEach(([id,qty]) => {
-    const p = all.find(x=>x.id===id); if(!p) return;
-    const price = currency==='INR'?p.priceINR:p.priceUSD; if(price===null) return;
-    h += `<div class="cart-line"><span class="item-name">${p.name} × ${qty}</span><span class="item-total">${sym}${(price*qty).toLocaleString()}</span></div>`;
+    const p = all.find(x=>x.id===id); if(!p||p.price===null) return;
+    h += `<div class="cart-line"><span class="item-name">${p.name} × ${qty}</span><span class="item-total">₹${(p.price*qty).toLocaleString('en-IN')}</span></div>`;
   });
   const {total,hasShip} = getCartTotal();
   list.innerHTML = h;
-  tot.innerHTML = `${sym}${total.toLocaleString()}${hasShip?'<span class="shipping-extra">+ shipping</span>':''}`;
+  tot.innerHTML = `₹${total.toLocaleString('en-IN')}${hasShip?'<span class="shipping-extra">+ shipping</span>':''}`;
 }
 
 function clearCart() { cart={}; renderProducts(); updateCart(); }
@@ -467,44 +380,31 @@ function generateRef() {
 function openPayment() {
   const entries = Object.entries(cart).filter(([_,q])=>q>0);
   if(!entries.length) return;
-  const all=getAllProducts(), sym=currency==='INR'?'₹':'$', {total,hasShip}=getCartTotal(), ref=generateRef();
+  const all=getAllProducts(), {total,hasShip}=getCartTotal(), ref=generateRef();
   let lines=[], sHTML='';
   entries.forEach(([id,qty]) => {
-    const p=all.find(x=>x.id===id); if(!p) return;
-    const price=currency==='INR'?p.priceINR:p.priceUSD; if(price===null) return;
-    const lt=price*qty;
-    lines.push(`${p.name} (${id}) × ${qty} = ${sym}${lt.toLocaleString()}`);
-    sHTML += `<div class="cart-line"><span class="item-name">${p.name} × ${qty}</span><span class="item-total">${sym}${lt.toLocaleString()}</span></div>`;
+    const p=all.find(x=>x.id===id); if(!p||p.price===null) return;
+    const lt=p.price*qty;
+    lines.push(`${p.name} (${id}) × ${qty} = ₹${lt.toLocaleString('en-IN')}`);
+    sHTML += `<div class="cart-line"><span class="item-name">${p.name} × ${qty}</span><span class="item-total">₹${lt.toLocaleString('en-IN')}</span></div>`;
   });
-  sHTML += `<div class="order-total-line"><span>Total</span><span class="amt">${sym}${total.toLocaleString()}${hasShip?' + shipping':''}</span></div>`;
+  sHTML += `<div class="order-total-line"><span>Total</span><span class="amt">₹${total.toLocaleString('en-IN')}${hasShip?' + shipping':''}</span></div>`;
 
   document.getElementById('orderSummaryBox').innerHTML = sHTML;
-  document.getElementById('modalSubtitle').textContent = `${entries.length} item${entries.length>1?'s':''} · ${sym}${total.toLocaleString()}`;
+  document.getElementById('modalSubtitle').textContent = `${entries.length} item${entries.length>1?'s':''} · ₹${total.toLocaleString('en-IN')}`;
   document.getElementById('orderRef').textContent = ref;
-  document.getElementById('upiAmountVal').textContent = `${sym}${total.toLocaleString()}`;
+  document.getElementById('upiAmountVal').textContent = `₹${total.toLocaleString('en-IN')}`;
 
-  if(currency==='INR') {
-    const upiStr = `upi://pay?pa=${UPI_ID}&pn=BhaaShaa%20Works&am=${total}&cu=INR&tn=Order%20${ref}`;
-    document.getElementById('upiQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiStr)}`;
-  }
+  const upiStr = `upi://pay?pa=${UPI_ID}&pn=BhaaShaa%20Works&am=${total}&cu=INR&tn=Order%20${ref}`;
+  document.getElementById('upiQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiStr)}`;
 
-  const waMsg = `Hi, I've placed an order.\n\nOrder Ref: ${ref}\nCurrency: ${currency}\n\n${lines.join('\n')}\n\nTotal: ${sym}${total.toLocaleString()}${hasShip?' + shipping':''}\n\nPayment proof attached / will follow.`;
+  const waMsg = `Hi, I've placed an order.\n\nOrder Ref: ${ref}\n\n${lines.join('\n')}\n\nTotal: ₹${total.toLocaleString('en-IN')}${hasShip?' + shipping':''}\n\nPayment proof attached / will follow.`;
   document.getElementById('whatsappLink').href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(waMsg)}`;
 
-  const emailBody = `Dear BhaaShaa Works,\n\nOrder Reference: ${ref}\nCurrency: ${currency}\n\nOrder Details:\n${lines.join('\n')}\n\nTotal: ${sym}${total.toLocaleString()}${hasShip?' + shipping':''}\n\nPayment proof attached / will follow.\n\nThank you!`;
+  const emailBody = `Dear BhaaShaa Works,\n\nOrder Reference: ${ref}\n\nOrder Details:\n${lines.join('\n')}\n\nTotal: ₹${total.toLocaleString('en-IN')}${hasShip?' + shipping':''}\n\nPayment proof attached / will follow.\n\nThank you!`;
   document.getElementById('emailLink').href = `mailto:${EMAIL}?subject=${encodeURIComponent('Order '+ref)}&body=${encodeURIComponent(emailBody)}`;
 
-  if(currency==='USD') {
-    document.getElementById('intlTab').style.display='block';
-    document.querySelector('[data-method="razorpay"]').style.display='none';
-    document.querySelector('[data-method="upi"]').style.display='none';
-    setPayMethod('intl');
-  } else {
-    document.getElementById('intlTab').style.display='none';
-    document.querySelector('[data-method="razorpay"]').style.display='block';
-    document.querySelector('[data-method="upi"]').style.display='block';
-    setPayMethod('razorpay');
-  }
+  setPayMethod('razorpay');
   document.getElementById('paymentModal').classList.add('open');
   document.body.style.overflow='hidden';
 }
