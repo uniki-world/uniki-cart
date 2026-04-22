@@ -330,9 +330,28 @@ function renderProducts() {
       return;
     }
     if (p.price===null) return;
-    html += `<div class="product-card ${qty>0?'has-items':''}"><div class="product-name">${p.name}</div><div class="product-sku">${p.id}</div><div class="product-desc">${p.desc}</div><div class="product-price">₹${p.price.toLocaleString('en-IN')}${p.shipping?`<span class="shipping-note">+ ${p.shipping}</span>`:''}</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button><span class="qty-value">${qty}</span><button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button></div></div>`;
+    html += `<div class="product-card ${qty>0?'has-items':''}"><div class="product-name">${p.name}</div><div class="product-sku">${p.id}</div><div class="product-desc">${p.desc}</div><div class="product-price">
+  ₹<input type="number" min="0" value="${p.price}" style="width:80px; font-weight:700; font-family:'Quicksand', sans-serif;" onchange="updateProductPrice('${p.id}', this.value)">
+  ${p.shipping ? `<span class="shipping-note">+ ${p.shipping}</span>` : ''}</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button><span class="qty-value">${qty}</span><button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button></div></div>`;
   });
   container.innerHTML = html;
+}
+
+function updateProductPrice(id, val) {
+  const priceVal = parseInt(val);
+  if (isNaN(priceVal) || priceVal < 0) return;
+  let updated = false;
+  // Update price in PRODUCTS for the current language only
+  PRODUCTS[lang].forEach(p => {
+    if (p.id === id) {
+      p.price = priceVal;
+      updated = true;
+    }
+  });
+  if(updated){
+    updateCart();
+    renderProducts();
+  }
 }
 
 function changeQty(id, d) {
