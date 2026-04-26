@@ -154,13 +154,41 @@
   }
   .order-summary-box .order-total-line .amt { color: var(--orange); }
 
-  .pay-method-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+  .pay-method-tabs { display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 2px solid #e0e0e0;}
   .pay-method-tab {
-    flex: 1; padding: 10px 8px; border: 2px solid #e0e0e0; border-radius: 10px;
-    background: white; font-family: 'Quicksand', sans-serif; font-weight: 600; font-size: 0.8rem;
-    cursor: pointer; text-align: center; transition: all 0.2s; color: #777;
-  }
-  .pay-method-tab.active { border-color: var(--dark-blue); background: var(--blue-light); color: var(--dark-blue); }
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #777;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  transition: color 0.25s;
+}
+
+  .pay-method-tab:hover {
+  color: var(--dark-blue);
+}
+
+.pay-method-tab.active {
+  color: var(--dark-blue);
+}
+
+.pay-method-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: var(--dark-blue);
+  border-radius: 2px 2px 0 0;
+}
+ /* .pay-method-tab.active { border-color: var(--dark-blue); background: var(--blue-light); color: var(--dark-blue); } */
   .pay-section { display: none; }
   .pay-section.active { display: block; }
 
@@ -248,7 +276,7 @@
     <div class="order-summary-box" id="orderSummaryBox"></div>
 
     <div class="pay-method-tabs" id="payMethodTabs">
-      <button class="pay-method-tab" data-method="razorpay" onclick="setPayMethod('razorpay')">Pay Online</button>
+      <button class="pay-method-tab active" data-method="razorpay" onclick="setPayMethod('razorpay')">Click "Pay Now"</button>
       <button class="pay-method-tab" data-method="upi" onclick="setPayMethod('upi')">UPI / QR</button>
     </div>
 
@@ -307,6 +335,7 @@ let lang = 'telugu', cart = {};
 const UPI_ID = 'bhaasha@idfcbank';
 const WHATSAPP_NUM = '919346061000';
 const EMAIL = 'hareesh@uniki.world';
+var SHIPPING_COST = 100
 
 function setLang(l) {
   lang = l;
@@ -368,6 +397,7 @@ function getCartTotal() {
     total += p.price*qty;
     if(p.shipping&&p.shipping.includes('extra')) hasShip=true;
   });
+  if (hasShip) total += SHIPPING_COST;
   return {total,hasShip};
 }
 
@@ -384,7 +414,7 @@ function updateCart() {
   });
   const {total,hasShip} = getCartTotal();
   list.innerHTML = h;
-  tot.innerHTML = `₹${total.toLocaleString('en-IN')}${hasShip?'<span class="shipping-extra">+ shipping</span>':''}`;
+  tot.innerHTML = `₹${total.toLocaleString('en-IN')}${hasShip?`<span class="shipping-extra">(shipping ₹${SHIPPING_COST})</span>`:''}`;
 }
 
 function clearCart() { cart={}; renderProducts(); updateCart(); }
@@ -405,7 +435,8 @@ function openPayment() {
     lines.push(`${p.name} (${id}) × ${qty} = ₹${lt.toLocaleString('en-IN')}`);
     sHTML += `<div class="cart-line"><span class="item-name">${p.name} × ${qty}</span><span class="item-total">₹${lt.toLocaleString('en-IN')}</span></div>`;
   });
-  sHTML += `<div class="order-total-line"><span>Total</span><span class="amt">₹${total.toLocaleString('en-IN')}${hasShip?' + shipping':''}</span></div>`;
+  sHTML += `<div class="order-total-line"><span>Total</span><span class="amt">₹${total.toLocaleString('en-IN')}${hasShip?` (including ₹${SHIPPING_COST} shipping)`:''}</span></div>`;
+
 
   document.getElementById('orderSummaryBox').innerHTML = sHTML;
   document.getElementById('modalSubtitle').textContent = `${entries.length} item${entries.length>1?'s':''} · ₹${total.toLocaleString('en-IN')}`;
