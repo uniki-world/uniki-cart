@@ -404,8 +404,9 @@ function openPayment() {
   document.getElementById('orderRef').textContent = ref;
   document.getElementById('upiAmountVal').textContent = `₹${total.toLocaleString('en-IN')}`;
 
-  // Use the static QR code image
-  document.getElementById('upiQR').src = QR_BASE64;
+// Dynamic UPI QR: encodes amount + order ref so customer doesn't type manually
+  const upiStr = `upi://pay?pa=${UPI_ID}&pn=BhaaShaa%20Works&am=${total}&cu=INR&tn=Order%20${ref}`;
+document.getElementById('upiQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiStr)}`;
 
   const waMsg = `Hi, I've placed an order.\n\nOrder Ref: ${ref}\n\n${lines.join('\n')}\nShipping: ₹${totalShipping.toLocaleString('en-IN')}\n\nTotal: ₹${total.toLocaleString('en-IN')}\n\nPayment proof attached / will follow.`;
   document.getElementById('whatsappLink').href = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(waMsg)}`;
